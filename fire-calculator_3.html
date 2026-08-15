@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ne Zaman Özgürsün?</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,300;9..144,500;9..144,600;9..144,700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+  :root{
+    --bg: #0e1512;
+    --bg-card: #141d19;
+    --line: #26332d;
+    --text: #e9e6dd;
+    --text-dim: #8a978f;
+    --gold: #c9a24b;
+    --teal: #4f9d8f;
+    --red-flag: #b5544a;
+  }
+
+  *{box-sizing:border-box; margin:0; padding:0;}
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    min-height: 100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    padding: 40px 20px;
+    background-image:
+      radial-gradient(circle at 15% 10%, rgba(201,162,75,0.06), transparent 40%),
+      radial-gradient(circle at 85% 90%, rgba(79,157,143,0.06), transparent 40%);
+  }
+
+  .wrap{ max-width: 880px; width:100%; }
+
+  .eyebrow{
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 14px;
+  }
+
+  h1{
+    font-family: 'Fraunces', serif;
+    font-weight: 500;
+    font-size: clamp(32px, 5vw, 52px);
+    line-height: 1.05;
+    letter-spacing: -0.01em;
+    margin-bottom: 10px;
+  }
+  h1 em{ font-style: italic; color: var(--gold); font-weight: 300; }
+
+  .sub{
+    color: var(--text-dim);
+    font-size: 14px;
+    max-width: 480px;
+    line-height: 1.6;
+    margin-bottom: 40px;
+  }
+
+  .grid{
+    display:grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--line);
+    background: var(--bg-card);
+  }
+  @media (max-width: 720px){ .grid{ grid-template-columns: 1fr; } }
+
+  .inputs{ padding: 36px; border-right: 1px solid var(--line); }
+  @media (max-width: 720px){ .inputs{ border-right:none; border-bottom:1px solid var(--line); } }
+
+  .field{ margin-bottom: 24px; }
+  .field:last-child{ margin-bottom: 0; }
+
+  .field label{
+    display:block;
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    margin-bottom: 10px;
+  }
+
+  .amount-input{
+    display:flex;
+    align-items:center;
+    border: 1px solid var(--line);
+    background: rgba(255,255,255,0.02);
+    transition: border-color 0.15s ease;
+  }
+  .amount-input:focus-within{ border-color: var(--gold); }
+  .amount-input input{
+    flex:1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 20px;
+    font-weight: 500;
+    padding: 14px 12px;
+    width: 100%;
+    -moz-appearance: textfield;
+  }
+  .amount-input input::-webkit-outer-spin-button,
+  .amount-input input::-webkit-inner-spin-button{
+    -webkit-appearance:none; margin:0;
+  }
+  .amount-input .unit{
+    padding: 0 14px;
+    color: var(--text-dim);
+    font-size: 14px;
+    border-left: 1px solid var(--line);
+    align-self:stretch;
+    display:flex;
+    align-items:center;
+  }
+
+  .assumptions{
+    margin-top: 32px;
+    padding-top: 24px;
+    border-top: 1px dashed var(--line);
+    font-size: 11px;
+    color: var(--text-dim);
+    display:flex;
+    gap: 24px;
+  }
+  .assumptions .a-item{ display:flex; flex-direction:column; gap:6px; }
+  .assumptions input{
+    background:transparent;
+    border:1px solid var(--line);
+    color: var(--text);
+    font-family:inherit;
+    font-size: 13px;
+    padding: 6px 8px;
+    width: 70px;
+  }
+
+  .result{
+    padding: 36px;
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+  }
+
+  .result .eyebrow2{
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform:uppercase;
+    color: var(--text-dim);
+    margin-bottom: 12px;
+  }
+
+  .years{
+    font-family:'Fraunces', serif;
+    font-size: clamp(56px, 9vw, 96px);
+    font-weight: 600;
+    line-height: 0.9;
+    color: var(--gold);
+  }
+  .years small{
+    font-size: 22px;
+    font-family:'JetBrains Mono', monospace;
+    font-weight: 400;
+    color: var(--text-dim);
+    margin-left: 8px;
+  }
+
+  .never{ color: var(--red-flag); }
+
+  .detail-line{
+    margin-top: 28px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--text-dim);
+    line-height: 2;
+  }
+  .detail-line b{ color: var(--text); font-weight: 500; }
+
+  .bar-wrap{
+    margin-top: 24px;
+    height: 6px;
+    background: var(--line);
+    position: relative;
+    overflow: hidden;
+  }
+  .bar-fill{
+    height: 100%;
+    background: linear-gradient(90deg, var(--teal), var(--gold));
+    width: 0%;
+    transition: width 0.4s ease;
+  }
+
+  footer{
+    margin-top: 20px;
+    font-size: 11px;
+    color: var(--text-dim);
+    opacity: 0.6;
+    text-align: center;
+  }
+
+  .share-btn{
+    margin-top: 28px;
+    padding: 14px 20px;
+    background: var(--gold);
+    color: #0e1512;
+    border: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.15s ease;
+  }
+  .share-btn:hover{ opacity: 0.85; }
+  .share-btn:disabled{
+    background: var(--line);
+    color: var(--text-dim);
+    cursor: not-allowed;
+  }
+  .share-hint{
+    margin-top: 10px;
+    font-size: 11px;
+    color: var(--text-dim);
+  }
+
+  .modal-overlay{
+    display:none;
+    position: fixed;
+    inset: 0;
+    background: rgba(6,10,8,0.86);
+    align-items:center;
+    justify-content:center;
+    padding: 20px;
+    z-index: 50;
+    overflow-y: auto;
+  }
+  .modal-overlay.open{ display:flex; }
+
+  .modal-card{
+    background: var(--bg-card);
+    border: 1px solid var(--gold);
+    max-width: 340px;
+    width: 100%;
+    padding: 24px;
+    text-align:center;
+    position: relative;
+  }
+  .modal-close{
+    position:absolute;
+    top: 10px; right: 12px;
+    background:none;
+    border:none;
+    color: var(--text-dim);
+    font-size: 20px;
+    cursor:pointer;
+    line-height:1;
+    z-index: 2;
+  }
+  .card-canvas-wrap{
+    width: 100%;
+    aspect-ratio: 9/16;
+    background: var(--bg);
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+  .card-canvas-wrap img{
+    width: 100%;
+    height: 100%;
+    display:block;
+    object-fit: cover;
+  }
+
+  .share-row{
+    display:flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  .share-icon-btn{
+    flex:1;
+    padding: 12px 0;
+    background: transparent;
+    border: 1px solid var(--line);
+    color: var(--text);
+    cursor:pointer;
+    transition: border-color 0.15s ease, background 0.15s ease;
+    text-decoration:none;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+  }
+  .share-icon-btn:hover{ border-color: var(--gold); background: rgba(201,162,75,0.08); }
+  .share-icon-btn svg{ width:18px; height:18px; }
+
+  .download-hint{
+    margin-top: 14px;
+    font-size: 10px;
+    color: var(--text-dim);
+    line-height: 1.6;
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="eyebrow">Finansal Özgürlük Hesaplayıcı</div>
+  <h1>Ne zaman <em>özgür</em> olursun?</h1>
+  <p class="sub">Bugünkü sermayeni, aylık biriktirdiğini ve aylık harcamanı gir — pasif gelirin harcamanı karşılayana kadar kaç yıl geçeceğini hesaplayalım.</p>
+
+  <div class="grid">
+    <div class="inputs">
+      <div class="field">
+        <label>Mevcut sermaye</label>
+        <div class="amount-input"><input type="text" inputmode="numeric" id="capital" data-raw="500000"><span class="unit">₺</span></div>
+      </div>
+      <div class="field">
+        <label>Aylık tasarruf</label>
+        <div class="amount-input"><input type="text" inputmode="numeric" id="savings" data-raw="20000"><span class="unit">₺</span></div>
+      </div>
+      <div class="field">
+        <label>Aylık harcama (hedef)</label>
+        <div class="amount-input"><input type="text" inputmode="numeric" id="expense" data-raw="20000"><span class="unit">₺</span></div>
+      </div>
+      <div class="field">
+        <label>Yaşın (opsiyonel)</label>
+        <div class="amount-input"><input type="number" id="age" min="0" max="100" step="1" placeholder="ör. 29"><span class="unit">yaş</span></div>
+      </div>
+
+      <div class="assumptions">
+        <div class="a-item">
+          <span>Yıllık reel getiri</span>
+          <input type="number" id="returnRate" value="7" step="0.5"> %
+        </div>
+        <div class="a-item">
+          <span>Güvenli çekim oranı</span>
+          <input type="number" id="withdrawRate" value="4" step="0.5"> %
+        </div>
+      </div>
+    </div>
+
+    <div class="result">
+      <div class="eyebrow2">Sonuç</div>
+      <div class="years" id="yearsOut">— <small>yıl</small></div>
+      <div class="bar-wrap"><div class="bar-fill" id="barFill"></div></div>
+      <div class="detail-line" id="detailOut"></div>
+      <button class="share-btn" id="shareBtn" disabled>Sonucunu Gör</button>
+      <div class="share-hint" id="shareHint">Yaşını gir, kaçında özgür olacağını görelim.</div>
+    </div>
+  </div>
+
+  <footer>Reel getiri = enflasyon sonrası varsayım. Hesaplama, aylık bileşik büyüme + %4 kuralına dayanır. Yatırım tavsiyesi değildir.</footer>
+</div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-card">
+    <button class="modal-close" id="modalClose">✕</button>
+    <div class="card-canvas-wrap"><img id="cardImg" alt="Sonuç kartı"></div>
+    <div class="share-row">
+      <a class="share-icon-btn" id="shareTwitter" href="#" title="X'te Paylaş">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M18.9 2H22l-7.6 8.7L23.3 22h-7l-5.5-7.2L4.5 22H1.4l8.1-9.3L1 2h7.2l5 6.6L18.9 2zm-1.2 18h1.7L7.4 3.9H5.6L17.7 20z"/></svg>
+      </a>
+      <a class="share-icon-btn" id="shareWhatsapp" href="#" title="WhatsApp'ta Paylaş">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.5 2 2 6.5 2 12c0 1.9.5 3.6 1.4 5.1L2 22l5.1-1.3C8.5 21.5 10.2 22 12 22c5.5 0 10-4.5 10-10S17.5 2 12 2zm0 18c-1.6 0-3.1-.4-4.4-1.2l-.3-.2-3 .8.8-2.9-.2-.3C4.4 15 4 13.5 4 12c0-4.4 3.6-8 8-8s8 3.6 8 8-3.6 8-8 8zm4.4-5.9c-.2-.1-1.4-.7-1.7-.8-.2-.1-.4-.1-.6.1-.2.2-.6.8-.8 1-.1.2-.3.2-.5.1-.2-.1-1-.4-1.9-1.2-.7-.6-1.2-1.4-1.3-1.6-.1-.2 0-.4.1-.5.1-.1.2-.3.4-.4.1-.1.2-.3.2-.4.1-.2 0-.3 0-.4-.1-.1-.6-1.4-.8-1.9-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.4.1-.6.3-.2.2-.8.8-.8 1.9s.8 2.2.9 2.4c.1.2 1.6 2.5 4 3.5.6.2 1 .4 1.3.5.6.2 1.1.1 1.5.1.5-.1 1.4-.6 1.6-1.1.2-.5.2-1 .1-1.1-.1-.1-.2-.2-.4-.3z"/></svg>
+      </a>
+      <button class="share-icon-btn" id="shareInsta" title="Instagram Story'de Paylaş">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2c2.7 0 3.1 0 4.1.1 1 .1 1.7.2 2.3.5.6.2 1.1.6 1.6 1.1.5.5.8 1 1.1 1.6.2.6.4 1.3.5 2.3.1 1 .1 1.4.1 4.1s0 3.1-.1 4.1c-.1 1-.2 1.7-.5 2.3-.2.6-.6 1.1-1.1 1.6-.5.5-1 .8-1.6 1.1-.6.2-1.3.4-2.3.5-1 .1-1.4.1-4.1.1s-3.1 0-4.1-.1c-1-.1-1.7-.2-2.3-.5-.6-.2-1.1-.6-1.6-1.1-.5-.5-.8-1-1.1-1.6-.2-.6-.4-1.3-.5-2.3C2 15.1 2 14.7 2 12s0-3.1.1-4.1c.1-1 .2-1.7.5-2.3.2-.6.6-1.1 1.1-1.6.5-.5 1-.8 1.6-1.1.6-.2 1.3-.4 2.3-.5C8.9 2 9.3 2 12 2zm0 5a5 5 0 100 10 5 5 0 000-10zm0 8.2a3.2 3.2 0 110-6.4 3.2 3.2 0 010 6.4zm5.2-8.4a1.2 1.2 0 100 2.4 1.2 1.2 0 000-2.4z"/></svg>
+      </button>
+    </div>
+    <button class="share-icon-btn" id="downloadImg" style="margin-top:10px; width:100%;">Görseli İndir</button>
+    <div class="download-hint" id="shareHintModal">Instagram Story'de paylaşmak için görsel otomatik indirilir, sonra story'e ekleyebilirsin.</div>
+  </div>
+</div>
+
+<script>
+  const $ = id => document.getElementById(id);
+  const fmt = n => Math.round(n).toLocaleString('tr-TR');
+
+  function bindThousands(id){
+    const el = $(id);
+    el.value = fmt(+el.dataset.raw);
+    el.addEventListener('input', () => {
+      const digits = el.value.replace(/\D/g,'');
+      el.dataset.raw = digits || '0';
+      el.value = digits ? fmt(+digits) : '';
+      calc();
+    });
+    el.addEventListener('blur', () => {
+      if(el.value === '') { el.dataset.raw = '0'; el.value = fmt(0); calc(); }
+    });
+  }
+
+  let lastResult = null;
+
+  function calc(){
+    const capital = +$('capital').dataset.raw;
+    const savings = +$('savings').dataset.raw;
+    const expense = +$('expense').dataset.raw;
+    const annualReturn = +$('returnRate').value / 100;
+    const withdrawRate = +$('withdrawRate').value / 100;
+
+    const monthlyRate = annualReturn / 12;
+    const targetPortfolio = expense * 12 / withdrawRate;
+
+    let months = 0;
+    let fv = capital;
+    const maxMonths = 12 * 80;
+
+    if(fv >= targetPortfolio){
+      months = 0;
+    } else if(savings <= 0 && monthlyRate <= 0){
+      months = Infinity;
+    } else {
+      while(fv < targetPortfolio && months < maxMonths){
+        fv = fv * (1 + monthlyRate) + savings;
+        months++;
+      }
+      if(months >= maxMonths) months = Infinity;
+    }
+
+    const yearsOut = $('yearsOut');
+    const barFill = $('barFill');
+    const detailOut = $('detailOut');
+    const shareBtn = $('shareBtn');
+    const shareHint = $('shareHint');
+    const age = $('age').value ? +$('age').value : null;
+
+    if(months === Infinity){
+      yearsOut.innerHTML = '<span class="never">∞</span> <small>bu tempoyla asla</small>';
+      barFill.style.width = '0%';
+      detailOut.innerHTML = `Hedef portföy büyüklüğü: <b>${fmt(targetPortfolio)} ₺</b><br>Bu tasarruf/getiri kombinasyonuyla hedefe ulaşmıyorsun — tasarrufu artır ya da hedef harcamayı düşür.`;
+      shareBtn.disabled = true;
+      shareHint.textContent = 'Bu tempoyla hesaplanamadı — tasarrufu artırıp tekrar dene.';
+      lastResult = null;
+    } else {
+      const years = months / 12;
+      yearsOut.innerHTML = `${years < 0.1 ? '0' : years.toFixed(1)} <small>yıl</small>`;
+      const pct = Math.min(100, (capital / targetPortfolio) * 100);
+      barFill.style.width = pct + '%';
+      detailOut.innerHTML = `Hedef portföy büyüklüğü: <b>${fmt(targetPortfolio)} ₺</b><br>Bugünden itibaren <b>${years.toFixed(1)} yıl</b> sonra aylık <b>${fmt(expense)} ₺</b> pasif gelirle yaşayabilirsin.<br>Şu an hedefin <b>%${pct.toFixed(1)}</b>'ine sahipsin.`;
+
+      lastResult = { years, freeAge: age ? Math.round(age + years) : null };
+
+      if(age){
+        shareBtn.disabled = false;
+        shareHint.textContent = '';
+      } else {
+        shareBtn.disabled = true;
+        shareHint.textContent = 'Yaşını gir, kaçında özgür olacağını görelim.';
+      }
+    }
+  }
+
+  // ---- Share card image generation ----
+  async function generateCardBlob(freeAge, years){
+    try{
+      await Promise.all([
+        document.fonts.load('700 300px Fraunces'),
+        document.fonts.load('500 40px Fraunces'),
+        document.fonts.load('600 40px JetBrains Mono')
+      ]);
+    }catch(e){}
+
+    const W = 1080, H = 1920;
+    const canvas = document.createElement('canvas');
+    canvas.width = W; canvas.height = H;
+    const ctx = canvas.getContext('2d');
+
+    // background
+    ctx.fillStyle = '#0e1512';
+    ctx.fillRect(0,0,W,H);
+    const g1 = ctx.createRadialGradient(W*0.15,H*0.1,0,W*0.15,H*0.1,W*0.7);
+    g1.addColorStop(0,'rgba(201,162,75,0.14)');
+    g1.addColorStop(1,'rgba(201,162,75,0)');
+    ctx.fillStyle = g1; ctx.fillRect(0,0,W,H);
+    const g2 = ctx.createRadialGradient(W*0.85,H*0.92,0,W*0.85,H*0.92,W*0.7);
+    g2.addColorStop(0,'rgba(79,157,143,0.14)');
+    g2.addColorStop(1,'rgba(79,157,143,0)');
+    ctx.fillStyle = g2; ctx.fillRect(0,0,W,H);
+
+    // border frame
+    ctx.strokeStyle = '#26332d';
+    ctx.lineWidth = 3;
+    ctx.strokeRect(40,40,W-80,H-80);
+
+    ctx.textAlign = 'center';
+
+    // eyebrow
+    ctx.fillStyle = '#4f9d8f';
+    ctx.font = '600 28px "JetBrains Mono", monospace';
+    ctx.save();
+    ctx.letterSpacing = '6px';
+    ctx.fillText('FİNANSAL ÖZGÜRLÜK', W/2, 260);
+    ctx.restore();
+
+    // headline
+    ctx.fillStyle = '#e9e6dd';
+    ctx.font = '500 46px "Fraunces", serif';
+    ctx.fillText('şu yaşında özgür', W/2, 350);
+    ctx.fillText('olacağım:', W/2, 410);
+
+    // BIG AGE
+    ctx.fillStyle = '#c9a24b';
+    ctx.font = '700 460px "Fraunces", serif';
+    ctx.fillText(String(freeAge), W/2, 900);
+
+    ctx.fillStyle = '#8a978f';
+    ctx.font = '600 34px "JetBrains Mono", monospace';
+    ctx.save();
+    ctx.letterSpacing = '4px';
+    ctx.fillText('YAŞINDA', W/2, 970);
+    ctx.restore();
+
+    // divider
+    ctx.strokeStyle = '#26332d';
+    ctx.beginPath();
+    ctx.moveTo(W*0.3, 1080);
+    ctx.lineTo(W*0.7, 1080);
+    ctx.stroke();
+
+    // years detail
+    ctx.fillStyle = '#e9e6dd';
+    ctx.font = '500 44px "Fraunces", serif';
+    ctx.fillText(`${years.toFixed(1)} yıl sonra`, W/2, 1180);
+    ctx.fillStyle = '#8a978f';
+    ctx.font = '400 30px "JetBrains Mono", monospace';
+    ctx.fillText('pasif gelirle yaşamaya başlıyorum', W/2, 1230);
+
+    // footer
+    ctx.fillStyle = '#8a978f';
+    ctx.font = '400 26px "JetBrains Mono", monospace';
+    ctx.fillText('Ne Zaman Özgürsün? — hesaplayıcı', W/2, H-120);
+
+    return new Promise(res => canvas.toBlob(res, 'image/png'));
+  }
+
+  let currentBlob = null;
+  let pendingShareText = '';
+
+  async function openModal(){
+    if(!lastResult || !lastResult.freeAge) return;
+    const blob = await generateCardBlob(lastResult.freeAge, lastResult.years);
+    const url = URL.createObjectURL(blob);
+    $('cardImg').src = url;
+    currentBlob = blob;
+
+    pendingShareText = `${lastResult.years.toFixed(1)} yıl sonra, ${lastResult.freeAge} yaşında finansal özgür olacağım 🎯`;
+
+    $('modalOverlay').classList.add('open');
+  }
+
+  function openShareWindow(shareUrl){
+    const win = window.open(shareUrl, '_blank', 'noopener,noreferrer');
+    if(!win){
+      window.top.location.href = shareUrl;
+    }
+  }
+
+  // Tries the OS-level share sheet with the actual image file attached.
+  // Returns true if it handled the share (or the user cancelled it),
+  // false if the browser doesn't support file sharing at all.
+  async function tryNativeShare(){
+    if(!currentBlob) return false;
+    const file = new File([currentBlob], 'finansal-ozgurluk-sonucu.png', { type: 'image/png' });
+    const shareData = { files: [file], text: pendingShareText, title: 'Finansal Özgürlük Sonucum' };
+    if(navigator.canShare && navigator.canShare(shareData)){
+      try{
+        await navigator.share(shareData);
+      }catch(e){ /* user cancelled — still counts as handled */ }
+      return true;
+    }
+    return false;
+  }
+
+  // Fallback for when native file sharing isn't available: opens the
+  // image directly (not via the download attribute, which iOS Safari
+  // often ignores for blob URLs) so the user can long-press > Add to
+  // Photos / Save Image themselves.
+  function openImageForManualSave(){
+    const url = URL.createObjectURL(currentBlob);
+    window.open(url, '_blank', 'noopener,noreferrer');
+  }
+
+  function downloadCard(){
+    if(!currentBlob) return;
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(currentBlob);
+    a.download = 'finansal-ozgurluk-sonucu.png';
+    a.click();
+  }
+
+  async function shareToWhatsapp(){
+    const handled = await tryNativeShare();
+    if(handled) return;
+    // No file-sharing support (e.g. desktop browser) — text-only fallback,
+    // wa.me has no way to attach an image via URL.
+    openShareWindow(`https://wa.me/?text=${encodeURIComponent(pendingShareText)}`);
+  }
+
+  async function shareToInstagram(){
+    const handled = await tryNativeShare();
+    if(handled) return;
+    openImageForManualSave();
+    alert(`Görsel yeni sekmede açıldı. Üzerine bas\u0131l\u0131 tut > "Foto\u011fraflara Ekle" ile kaydedip Instagram Story'ye oradan ekleyebilirsin.`);
+  }
+
+  async function shareToX(){
+    const handled = await tryNativeShare();
+    if(handled) return;
+    openShareWindow(`https://twitter.com/intent/tweet?text=${encodeURIComponent(pendingShareText)}`);
+  }
+
+  $('shareBtn').addEventListener('click', openModal);
+  $('modalClose').addEventListener('click', ()=> $('modalOverlay').classList.remove('open'));
+  $('modalOverlay').addEventListener('click', (e)=>{
+    if(e.target.id === 'modalOverlay') $('modalOverlay').classList.remove('open');
+  });
+  $('downloadImg').addEventListener('click', downloadCard);
+  $('shareInsta').addEventListener('click', shareToInstagram);
+  $('shareTwitter').addEventListener('click', (e) => {
+    e.preventDefault();
+    shareToX();
+  });
+  $('shareWhatsapp').addEventListener('click', (e) => {
+    e.preventDefault();
+    shareToWhatsapp();
+  });
+
+
+  bindThousands('capital');
+  bindThousands('savings');
+  bindThousands('expense');
+
+  ['age','returnRate','withdrawRate'].forEach(id=>{
+    $(id).addEventListener('input', calc);
+  });
+
+  calc();
+</script>
+
+</body>
+</html>
