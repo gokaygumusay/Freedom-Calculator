@@ -378,6 +378,11 @@
   </div>
 </div>
 
+<script type="module">
+  import { inject } from 'https://cdn.jsdelivr.net/npm/@vercel/analytics@1/dist/index.mjs';
+  inject();
+</script>
+
 <script>
   const $ = id => document.getElementById(id);
   const fmt = n => Math.round(n).toLocaleString('tr-TR');
