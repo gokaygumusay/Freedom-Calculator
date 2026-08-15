@@ -1,0 +1,29 @@
+{
+  "name": "freedom-calculator",
+  "version": "1.0.0",
+  "description": "Financial freedom calculator - Calculate when you'll achieve financial independence",
+  "main": "index.html",
+  "scripts": {
+    "dev": "npx serve .",
+    "test": "echo \"No tests specified\" && exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gokaygumusay/Freedom-Calculator.git"
+  },
+  "keywords": [
+    "finance",
+    "calculator",
+    "financial-freedom",
+    "fire"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/gokaygumusay/Freedom-Calculator/issues"
+  },
+  "homepage": "https://github.com/gokaygumusay/Freedom-Calculator#readme",
+  "dependencies": {
+    "@vercel/analytics": "^2.0.1"
+  }
+}
